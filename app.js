@@ -19,10 +19,14 @@ function randomHole(holes) {
   lastHole = hole;
   return hole;
 }
+
 function bonk(e) {
-  if (!e.isTrusted) return; //the .isTrusted property guarantees it is an actual mouse click and not someone using JS to hack the game
-  score++;
-  this.classList.remove("up");
+  //the .isTrusted property guarantees it is an actual mouse click and not someone using JS to hack the game
+  if (!e.isTrusted) return;
+  //if mole's parent hole has class "up" then mole can be clicked,
+  //then class "up" is removed to prevent double clicks
+  if (this.closest(".hole").classList.value.slice(-2) === "up") score++;
+  this.closest(".hole").classList.remove("up");
   scoreBoard.textContent = score;
 }
 
@@ -30,6 +34,7 @@ function peep() {
   const time = randomTime(200, 1000);
   const hole = randomHole(holes);
   hole.classList.add("up");
+  upMole = hole.classList.value.slice(-2);
   moles.forEach((mole) => mole.addEventListener("click", bonk));
   setTimeout(() => {
     hole.classList.remove("up");
